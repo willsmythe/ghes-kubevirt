@@ -33,10 +33,10 @@ spec:
               bus: virtio
             name: root-disk
             bootOrder: 1
-          - disk:
-              bus: virtio
-            name: data-disk
-            bootOrder: 2
+          #- disk:
+          #    bus: virtio
+          #  name: data-disk
+          #  bootOrder: 2
           interfaces:
           - name: default
             bridge: {}
