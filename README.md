@@ -80,6 +80,7 @@ minikube delete -p kubevirt
 ```
 minikube ip
 minikube dashboard
+minikube delete
 ```
 
 ### Random commands
