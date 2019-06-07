@@ -95,4 +95,8 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/cloud-generic.yaml
 
 
+kubectl label vm ghes-vm kubevirt.io/vm=ghes-vm
+
+kubectl label pod virt-launcher-ghes-vm-hxhhk kubevirt.io/vm=ghes-vm
+
 
