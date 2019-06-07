@@ -7,7 +7,7 @@ spec:
   running: true
   dataVolumeTemplates:
   - metadata:
-      name: ghes-dv
+      name: ghes-dv2
     spec:
       pvc:
         accessModes:
@@ -67,7 +67,7 @@ spec:
       terminationGracePeriodSeconds: 0
       volumes:
       - dataVolume:
-          name: ghes-dv
+          name: ghes-dv2
         name: root-disk
       #- hostDisk:
       #    capacity: 5Gi
