@@ -113,5 +113,5 @@ EOF
 kubectl apply -f https://gist.githubusercontent.com/gnawhleinad/0151195ea6412bfe39d6b341666ebcc2/raw/b4e35c8bb71b957c01a04bcfe39efdeeaa7a0b9c/github-enterprise-server.yaml
 
 
-kubectl patch virtualmachine ghesvm --type merge -p '{"spec":{"running":true}}
+kubectl patch virtualmachine ghes-vm --type merge -p "{\"spec\":{\"running\":true,\"runStrategy\": null}}"
 
