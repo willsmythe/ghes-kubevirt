@@ -17,28 +17,28 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ghes-http-service
+  name: ghes-service
 spec:
   ports:
   - port: 80
     protocol: TCP
-    targetPort: 80
+    targetPort: 443
   selector:
     kubevirt.io/vm: ghes-vm
   type: ClusterIP
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: ghes-8080-service
-spec:
-  ports:
-  - port: 8080
-    protocol: TCP
-    targetPort: 8080
-  selector:
-    kubevirt.io/vm: ghes-vm
-  type: ClusterIP  
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: ghes-https-service
+# spec:
+#   ports:
+#   - port: 7273
+#     protocol: TCP
+#     targetPort: 443
+#   selector:
+#     kubevirt.io/vm: ghes-vm
+#   type: ClusterIP  
 # ---
 # apiVersion: v1
 # kind: Service
@@ -59,32 +59,16 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: ghes-http-ingress
+  name: ghes-service-ingress
   annotations:
     kubernetes.io/ingress.class: addon-http-application-routing
 spec:
   rules:
-  - host: ghes.3223920f69cd44c58f81.eastus2.aksapp.io
+  - host: g.3223920f69cd44c58f81.eastus2.aksapp.io
     http:
       paths:
       - backend:
-          serviceName: ghes-http-service
+          serviceName: ghes-service
           servicePort: 80
-        path: /
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: ghes-8080-ingress
-  annotations:
-    kubernetes.io/ingress.class: addon-http-application-routing
-spec:
-  rules:
-  - host: ghes1.3223920f69cd44c58f81.eastus2.aksapp.io
-    http:
-      paths:
-      - backend:
-          serviceName: ghes-http-service
-          servicePort: 8080
         path: /
 
