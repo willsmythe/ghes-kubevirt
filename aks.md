@@ -37,6 +37,62 @@ END
 ```
 
 kubectl patch virtualmachine ghes-vm --type merge -p '{"spec":{"running":true}}'
-
-
 kubectl create configmap kubevirt-config -n kubevirt --from-literal debug.useEmulation=true --from-literal feature-gates=DataVolumes
+
+===
+
+### Networking
+
+HTTP application routing
+
+```
+az aks show --resource-group $RESOURCE_GROUP --name $CLUSTER --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName -o table
+```
+
+3223920f69cd44c58f81.eastus2.aksapp.io
+
+```
+cat << END > ghes-http.yml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ghes-http
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
+spec:
+  rules:
+  - host: ghes.3223920f69cd44c58f81.eastus2.aksapp.io
+    http:
+      paths:
+      - backend:
+          serviceName: management-console-http
+          servicePort: 80
+        path: /
+END
+---
+cat << END > ghes-https.yml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ghes-https
+  annotations:
+    kubernetes.io/ingress.class: addon-http-application-routing
+spec:
+  rules:
+  - host: ghes.3223920f69cd44c58f81.eastus2.aksapp.io
+    http:
+      paths:
+      - backend:
+          serviceName: management-console-http
+          servicePort: 80
+        path: /
+END
+
+```        
+
+https://kubernetes.github.io/ingress-nginx/deploy/#azure
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/cloud-generic.yaml
+
+
+

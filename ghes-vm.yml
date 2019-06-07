@@ -63,6 +63,9 @@ spec:
         resources:
           requests:
             memory: 3072M
+      networks:
+      - name: default
+        pod: {}
       terminationGracePeriodSeconds: 0
       volumes:
        - dataVolume:
