@@ -15,7 +15,7 @@ spec:
           - disk:
               bus: virtio
             name: root-disk      
-          #  bootOrder: 1
+            bootOrder: 1
           #- disk:
           #    bus: virtio
           #  name: data-disk
