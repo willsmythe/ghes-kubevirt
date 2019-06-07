@@ -14,10 +14,7 @@ spec:
           disks:
           - disk:
               bus: virtio
-            name: root-disk
-          - name: cloudinitdisk
-            disk:
-              bus: virtio            
+            name: root-disk      
           #  bootOrder: 1
           #- disk:
           #    bus: virtio
