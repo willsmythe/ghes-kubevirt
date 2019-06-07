@@ -12,6 +12,10 @@ TODO
 ```
 minikube config -p kubevirt set memory 4096
 minikube config -p kubevirt set disk-size 300g
+```
+
+#### Windows-specific
+```
 minikube config -p kubevirt set vm-driver hyperv
 minikube config -p kubevirt set hyperv-virtual-switch kubevirt
 ```
@@ -31,7 +35,7 @@ kubectl create -f https://github.com/kubevirt/containerized-data-importer/releas
 
 ```
 export KUBEVIRT_VERSION="v0.18.0"
-kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/v0.18.0/kubevirt-operator.yaml
+kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/$KUBEVIRT_VERSION/kubevirt-operator.yaml
 ```
 
 ```
@@ -39,15 +43,19 @@ kubectl create configmap kubevirt-config -n kubevirt --from-literal debug.useEmu
 ```
 
 ```
-kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/v0.18.0/kubevirt-cr.yaml
+kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/$KUBEVIRT_VERSION/kubevirt-cr.yaml
 ```
 
 ### GHES VM
+
+#### Create the ghes-vm VM resource
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/ghes-vm.yml
 kubectl get vms
 ```
+
+#### Start the ghes-vm (create the VirtualMachineInstance)
 
 ```
 virtctl start ghes-vs
