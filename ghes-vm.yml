@@ -2,11 +2,9 @@
 apiVersion: kubevirt.io/v1alpha3
 kind: VirtualMachine
 metadata:
-  labels:
-    kubevirt.io/vm: github-enterprise-server-vm
-  name: github-enterprise-server-vm
+  name: ghesvm
 spec:
-  running: false
+  running: true
   dataVolumeTemplates:
   - metadata:
       name: ghes-dv
@@ -24,7 +22,7 @@ spec:
   template:
     metadata:
       labels:
-        kubevirt.io/vm: github-enterprise-server-vm
+        kubevirt.io/domain: ghesvm
     spec:
       domain:
         devices:
@@ -63,8 +61,6 @@ spec:
               protocol: TCP
             - port: 25
               protocol: TCP
-        machine:
-          type: ""
         resources:
           requests:
             memory: 3072M
