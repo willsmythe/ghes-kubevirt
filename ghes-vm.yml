@@ -3,7 +3,7 @@ kind: VirtualMachine
 metadata:
   name: ghes-vm
 spec:
-  runStrategy: always
+  runStrategy: Always
   dataVolumeTemplates:
   - metadata:
       name: ghes-dv
