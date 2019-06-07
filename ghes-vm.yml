@@ -1,30 +1,13 @@
----
 apiVersion: kubevirt.io/v1alpha3
 kind: VirtualMachine
 metadata:
-  labels:
-    kubevirt.io/vm: github-enterprise-server-vm
-  name: github-enterprise-server-vm
+  name: ghesvm
 spec:
   running: false
-  dataVolumeTemplates:
-  - metadata:
-      name: ghes-dv
-    spec:
-      pvc:
-        accessModes:
-        - ReadWriteOnce
-        resources:
-          requests:
-            storage: 250Gi
-        #storageClassName: local
-      source:
-        http:
-          url: https://github-enterprise.s3.amazonaws.com/kvm/releases/github-enterprise-2.17.1.qcow2
   template:
     metadata:
       labels:
-        kubevirt.io/vm: github-enterprise-server-vm
+        kubevirt.io/domain: ghesvm
     spec:
       domain:
         devices:
@@ -32,7 +15,10 @@ spec:
           - disk:
               bus: virtio
             name: root-disk
-            bootOrder: 1
+          - name: cloudinitdisk
+            disk:
+              bus: virtio            
+          #  bootOrder: 1
           #- disk:
           #    bus: virtio
           #  name: data-disk
@@ -68,6 +54,9 @@ spec:
         resources:
           requests:
             memory: 3072M
+      networks:
+      - name: default
+        pod: {}
       terminationGracePeriodSeconds: 0
       volumes:
       - dataVolume:
@@ -78,3 +67,17 @@ spec:
       #    path: /data/disk.img
       #    type: DiskOrCreate
       #  name: data-disk
+  dataVolumeTemplates:
+  - metadata:
+      name: ghes-dv
+    spec:
+      pvc:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 250Gi
+        #storageClassName: local
+      source:
+        http:
+          url: https://github-enterprise.s3.amazonaws.com/kvm/releases/github-enterprise-2.17.1.qcow2
