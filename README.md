@@ -99,3 +99,11 @@ kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/%KUBEVI
 kubectl apply -f https://gist.githubusercontent.com/gnawhleinad/0151195ea6412bfe39d6b341666ebcc2/raw/b4e35c8bb71b957c01a04bcfe39efdeeaa7a0b9c/github-enterprise-server.yaml
 kubectl patch virtualmachine ghes-vm --type merge -p "{\"spec\":{\"running\":true}}"
 ```
+
+### Links
+
+* https://github.com/kubevirt/kubevirt/issues/2184
+* https://help.github.com/en/enterprise/2.17/admin
+
+
+virtctl expose virtualmachineinstance ghes-vm --name vmiservice --port 8080 --target-port 8080
