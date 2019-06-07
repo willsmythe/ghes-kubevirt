@@ -2,12 +2,11 @@
 apiVersion: kubevirt.io/v1alpha3
 kind: VirtualMachine
 metadata:
-  name: ghesvm
+  name: ghes-vm
 spec:
-  running: true
   dataVolumeTemplates:
   - metadata:
-      name: ghes-dv2
+      name: ghes-dv
     spec:
       pvc:
         accessModes:
@@ -22,7 +21,7 @@ spec:
   template:
     metadata:
       labels:
-        kubevirt.io/domain: ghesvm
+        kubevirt.io/domain: ghes-vm
     spec:
       domain:
         devices:
@@ -67,7 +66,7 @@ spec:
       terminationGracePeriodSeconds: 0
       volumes:
       - dataVolume:
-          name: ghes-dv2
+          name: ghes-dv
         name: root-disk
       #- hostDisk:
       #    capacity: 5Gi
