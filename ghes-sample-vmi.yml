@@ -61,6 +61,6 @@ spec:
         claimName: root-volume-claim
     - name: data-disk
       hostDisk:
-        capacity: 5Gi
-        path: /data
+        capacity: 40Gi
+        path: /data/disks/github-enterprise-server-vm.img
         type: DiskOrCreate
