@@ -4,20 +4,20 @@ metadata:
   name: ghes-vm
 spec:
   running: true
-  dataVolumeTemplates:
-  - metadata:
-      name: ghes-dv-4
-    spec:
-      pvc:
-        accessModes:
-        - ReadWriteOnce
-        resources:
-          requests:
-            storage: 250Gi
-        storageClassName: managed-premium
-      source:
-        http:
-          url: https://github-enterprise.s3.amazonaws.com/kvm/releases/github-enterprise-2.17.1.qcow2
+  # dataVolumeTemplates:
+  # - metadata:
+  #     name: ghes-dv-4
+  #   spec:
+  #     pvc:
+  #       accessModes:
+  #       - ReadWriteOnce
+  #       resources:
+  #         requests:
+  #           storage: 250Gi
+  #       storageClassName: managed-premium
+  #     source:
+  #       http:
+  #         url: https://github-enterprise.s3.amazonaws.com/kvm/releases/github-enterprise-2.17.1.qcow2
   template:
     metadata:
       labels:
@@ -68,12 +68,12 @@ spec:
         pod: {}
       terminationGracePeriodSeconds: 0
       volumes:
-       - dataVolume:
-           name: ghes-dv-4
-         name: root-disk
-      #- name: root-disk
-      #  persistentVolumeClaim:
-      #    claimName: ghes-dv-3
+      #  - dataVolume:
+      #      name: ghes-dv-4
+      #    name: root-disk
+      - name: root-disk
+        persistentVolumeClaim:
+          claimName: ghes-dv-4
       #- hostDisk:
       #    capacity: 5Gi
       #    path: /data/disk.img
