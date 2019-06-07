@@ -1,0 +1,66 @@
+apiVersion: kubevirt.io/v1alpha3
+kind: VirtualMachineInstance
+metadata:
+  labels:
+    kubevirt.io/vm: github-enterprise-server-vm
+  name: github-enterprise-server
+  namespace: github
+spec:
+  domain:
+    cpu:
+      cores: 2
+    devices:
+      disks:
+      - disk:
+          bus: virtio
+        name: root-disk
+        dedicatedIOThread: true
+        cache: none
+        bootOrder: 1
+      - disk:
+          bus: virtio
+        name: data-disk
+        dedicatedIOThread: true
+        cache: none
+        bootOrder: 2
+      interfaces:
+      - name: default
+        bridge: {}
+        ports:
+        - port: 8443
+          protocol: TCP
+        - port: 8080
+          protocol: TCP
+        - port: 122
+          protocol: TCP
+        - port: 1194
+          protocol: UDP
+        - port: 123
+          protocol: UDP
+        - port: 161
+          protocol: UDP
+        - port: 443
+          protocol: TCP
+        - port: 80
+          protocol: TCP
+        - port: 22
+          protocol: TCP
+        - port: 9418
+          protocol: TCP
+        - port: 25
+          protocol: TCP
+    resources:
+      requests:
+        memory: 3072M
+  networks:
+  - name: default
+    pod: {}
+  volumes:
+    - name: root-disk
+      persistentVolumeClaim:
+        claimName: root-volume-claim
+    - name: data-disk
+      hostDisk:
+        capacity: 5Gi
+        path: /data
+        type: DiskOrCreate
