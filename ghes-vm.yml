@@ -73,8 +73,8 @@ spec:
       - dataVolume:
           name: ghes-dv
         name: root-disk
-      - hostDisk:
-          capacity: 5Gi
-          path: /data/disk.img
-          type: DiskOrCreate
-        name: data-disk
+      #- hostDisk:
+      #    capacity: 5Gi
+      #    path: /data/disk.img
+      #    type: DiskOrCreate
+      #  name: data-disk
