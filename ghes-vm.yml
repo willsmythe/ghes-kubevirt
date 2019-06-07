@@ -3,21 +3,21 @@ kind: VirtualMachine
 metadata:
   name: ghes-vm
 spec:
-  running: false
-  dataVolumeTemplates:
-  - metadata:
-      name: ghes-dv-3
-    spec:
-      pvc:
-        accessModes:
-        - ReadWriteOnce
-        resources:
-          requests:
-            storage: 250Gi
-        #storageClassName: local
-      source:
-        http:
-          url: https://github-enterprise.s3.amazonaws.com/kvm/releases/github-enterprise-2.17.1.qcow2
+  running: true
+  # dataVolumeTemplates:
+  # - metadata:
+  #     name: ghes-dv-3
+  #   spec:
+  #     pvc:
+  #       accessModes:
+  #       - ReadWriteOnce
+  #       resources:
+  #         requests:
+  #           storage: 250Gi
+  #       #storageClassName: local
+  #     source:
+  #       http:
+  #         url: https://github-enterprise.s3.amazonaws.com/kvm/releases/github-enterprise-2.17.1.qcow2
   template:
     metadata:
       labels:
@@ -65,11 +65,15 @@ spec:
             memory: 3072M
       terminationGracePeriodSeconds: 0
       volumes:
-      - dataVolume:
-          name: ghes-dv-3
-        name: root-disk
+      # - dataVolume:
+      #     name: ghes-dv-3
+      #   name: root-disk
+      - name: root-disk
+        persistentVolumeClaim:
+          claimName: ghes-dv-3
       #- hostDisk:
       #    capacity: 5Gi
       #    path: /data/disk.img
       #    type: DiskOrCreate
       #  name: data-disk
+      
