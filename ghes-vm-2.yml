@@ -71,8 +71,8 @@ spec:
           name: ghes-dv-5
         name: root-disk
       - emptyDisk:
-        capacity: 40Gi
-      name: emptydisk
+          capacity: 40Gi
+        name: emptydisk
       # - name: root-disk
       #   persistentVolumeClaim:
       #     claimName: ghes-dv-4
