@@ -29,10 +29,10 @@ spec:
               bus: virtio
             name: root-disk
             bootOrder: 1
-          #- disk:
-          #    bus: virtio
-          #  name: data-disk
-          #  bootOrder: 2
+         - disk:
+              bus: virtio
+            name: emptydisk
+            dedicatedIOThread: true
           interfaces:
           - name: default
             bridge: {}
@@ -70,11 +70,14 @@ spec:
       - dataVolume:
           name: ghes-dv-5
         name: root-disk
+      - emptyDisk:
+        capacity: 40Gi
+      name: emptydisk
       # - name: root-disk
       #   persistentVolumeClaim:
       #     claimName: ghes-dv-4
       #- hostDisk:
-      #    capacity: 5Gi
+      #    capacity: 40Gi
       #    path: /data/disk.img
       #    type: DiskOrCreate
       #  name: data-disk
