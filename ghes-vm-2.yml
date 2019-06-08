@@ -3,20 +3,20 @@ kind: VirtualMachine
 metadata:
   name: ghes-vm
 spec:
-  running: false
   dataVolumeTemplates:
-  - metadata:
-      name: ghes-dv-5
-    spec:
-      pvc:
-        accessModes:
-        - ReadWriteMany
-        resources:
-          requests:
-            storage: 250Gi
-      source:
-        http:
-          url: https://github-enterprise.s3.amazonaws.com/kvm/releases/github-enterprise-2.17.1.qcow2
+    - metadata:
+        name: ghes-dv
+      spec:
+        pvc:
+          accessModes:
+          - ReadWriteMany
+          resources:
+            requests:
+              storage: 250Gi
+        source:
+          http:
+            url: https://github-enterprise.s3.amazonaws.com/kvm/releases/github-enterprise-2.17.1.qcow2
+  running: true
   template:
     metadata:
       labels:
@@ -25,10 +25,10 @@ spec:
       domain:
         devices:
           disks:
-          - disk:
+          - volumeName: root-disk
+            name: disk0
+            disk:
               bus: virtio
-            name: root-disk
-            bootOrder: 1
           #- disk:
           #    bus: virtio
           #  name: data-disk
@@ -68,7 +68,7 @@ spec:
       terminationGracePeriodSeconds: 0
       volumes:
       - dataVolume:
-          name: ghes-dv-5
+          name: ghes-dv
         name: root-disk
       # - name: root-disk
       #   persistentVolumeClaim:
