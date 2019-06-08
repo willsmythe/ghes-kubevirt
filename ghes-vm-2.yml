@@ -22,10 +22,11 @@ spec:
       pvc:
         accessModes:
         - ReadWriteOnce
+        hostPath:
+          path: "/dev/vdb"
         resources:
           requests:
             storage: 20Gi
-            # path: /dev/vdb
       source:
         blank: {}
   running: true
@@ -73,7 +74,7 @@ spec:
               protocol: TCP
         resources:
           requests:
-            memory: 16000M
+            memory: 8000M
       networks:
       - name: default
         pod: {}
