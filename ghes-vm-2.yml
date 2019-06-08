@@ -4,18 +4,18 @@ metadata:
   name: ghes-vm
 spec:
   dataVolumeTemplates:
-    - metadata:
-        name: ghes-dv
-      spec:
-        pvc:
-          accessModes:
-          - ReadWriteMany
-          resources:
-            requests:
-              storage: 250Gi
-        source:
-          http:
-            url: https://github-enterprise.s3.amazonaws.com/kvm/releases/github-enterprise-2.17.1.qcow2
+  - metadata:
+      name: ghes-dv-5
+    spec:
+      pvc:
+        accessModes:
+        - ReadWriteMany
+        resources:
+          requests:
+            storage: 250Gi
+      source:
+        http:
+          url: https://github-enterprise.s3.amazonaws.com/kvm/releases/github-enterprise-2.17.1.qcow2
   running: true
   template:
     metadata:
@@ -68,7 +68,7 @@ spec:
       terminationGracePeriodSeconds: 0
       volumes:
       - dataVolume:
-          name: ghes-dv
+          name: ghes-dv-5
         name: root-disk
       # - name: root-disk
       #   persistentVolumeClaim:
@@ -78,4 +78,3 @@ spec:
       #    path: /data/disk.img
       #    type: DiskOrCreate
       #  name: data-disk
-      
