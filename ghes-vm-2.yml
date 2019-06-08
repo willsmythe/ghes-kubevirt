@@ -24,7 +24,8 @@ spec:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 40Gi
+            storage: 20Gi
+            path: /dev/vdb
       source:
         blank: {}
   running: true
@@ -43,6 +44,7 @@ spec:
           - disk:
               bus: virtio
             name: data-disk
+            dedicatedIOThread: true
           interfaces:
           - name: default
             bridge: {}
@@ -71,7 +73,7 @@ spec:
               protocol: TCP
         resources:
           requests:
-            memory: 3072M
+            memory: 16Mi
       networks:
       - name: default
         pod: {}
