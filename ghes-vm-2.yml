@@ -3,14 +3,14 @@ kind: VirtualMachine
 metadata:
   name: ghes-vm
 spec:
-  running: true
+  running: false
   dataVolumeTemplates:
   - metadata:
       name: ghes-dv-5
     spec:
       pvc:
         accessModes:
-        - ReadWriteOnce
+        - ReadWriteMany
         resources:
           requests:
             storage: 250Gi
