@@ -25,10 +25,10 @@ spec:
       domain:
         devices:
           disks:
-          - volumeName: root-disk
-            name: disk0
-            disk:
+          - disk:
               bus: virtio
+            name: root-disk
+            bootOrder: 1
           #- disk:
           #    bus: virtio
           #  name: data-disk
