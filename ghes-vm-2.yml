@@ -44,7 +44,7 @@ spec:
           - disk:
               bus: virtio
             name: data-disk
-            # dedicatedIOThread: true
+            dedicatedIOThread: true
           interfaces:
           - name: default
             bridge: {}
@@ -85,10 +85,3 @@ spec:
       - dataVolume:
           name: ghes-dv-6
         name: data-disk
-      # - name: root-disk
-      #   persistentVolumeClaim:
-      #     claimName: ghes-dv-4
-      #    - disk:
-      #        bus: virtio
-      #      name: data-disk
-      #      bootOrder: 2
