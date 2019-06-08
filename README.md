@@ -53,6 +53,13 @@ curl -L -o virtctl \
 chmod +x virtctl
 ````
 
+and if you are on a mac :)
+```
+curl -L -o virtctl \
+    https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/virtctl-${KUBEVIRT_VERSION}-darwin-amd64
+chmod +x virtctl
+```
+
 ```
 kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/$KUBEVIRT_VERSION/kubevirt-cr.yaml
 ```
