@@ -29,7 +29,7 @@ spec:
               bus: virtio
             name: root-disk
             bootOrder: 1
-         - disk:
+          - disk:
               bus: virtio
             name: emptydisk
             dedicatedIOThread: true
