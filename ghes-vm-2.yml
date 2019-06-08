@@ -9,13 +9,24 @@ spec:
     spec:
       pvc:
         accessModes:
-        - ReadWriteMany
+        - ReadWriteOnce
         resources:
           requests:
             storage: 250Gi
       source:
         http:
           url: https://github-enterprise.s3.amazonaws.com/kvm/releases/github-enterprise-2.17.1.qcow2
+  - metadata:
+      name: ghes-dv-6
+    spec:
+      pvc:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 40Gi
+      source:
+        blank: {}
   running: true
   template:
     metadata:
@@ -32,7 +43,6 @@ spec:
           - disk:
               bus: virtio
             name: data-disk
-            bootOrder: 2
           interfaces:
           - name: default
             bridge: {}
@@ -70,14 +80,13 @@ spec:
       - dataVolume:
           name: ghes-dv-5
         name: root-disk
-      - emptyDisk:
-          capacity: 40Gi
+      - dataVolume:
+          name: ghes-dv-6
         name: data-disk
       # - name: root-disk
       #   persistentVolumeClaim:
       #     claimName: ghes-dv-4
-      #- hostDisk:
-      #    capacity: 40Gi
-      #    path: /data/disk.img
-      #    type: DiskOrCreate
-      #  name: data-disk
+      #    - disk:
+      #        bus: virtio
+      #      name: data-disk
+      #      bootOrder: 2
