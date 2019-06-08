@@ -43,7 +43,7 @@ spec:
           - disk:
               bus: virtio
             name: data-disk
-            dedicatedIOThread: true
+            bootOrder: 2
           interfaces:
           - name: default
             bridge: {}
