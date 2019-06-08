@@ -57,6 +57,11 @@ chmod +x virtctl
 kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/$KUBEVIRT_VERSION/kubevirt-cr.yaml
 ```
 
+Check that kubevirt is up and operational
+```
+kubectl get pods -n kubevirt
+```
+
 ### GHES VM
 
 #### Create the ghes-vm VM resource
