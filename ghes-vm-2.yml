@@ -22,8 +22,6 @@ spec:
       pvc:
         accessModes:
         - ReadWriteOnce
-        hostPath:
-          path: "/dev/vdb"
         resources:
           requests:
             storage: 20Gi
