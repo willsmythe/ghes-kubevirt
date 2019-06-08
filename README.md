@@ -48,6 +48,16 @@ kubectl create configmap kubevirt-config -n kubevirt --from-literal debug.useEmu
 ```
 
 ```
+kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/$KUBEVIRT_VERSION/kubevirt-cr.yaml
+```
+
+Check that kubevirt is up and operational
+```
+kubectl get pods -n kubevirt
+```
+
+Install virtcl
+```
 curl -L -o virtctl \
     https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/virtctl-${KUBEVIRT_VERSION}-linux-amd64
 chmod +x virtctl
@@ -60,33 +70,24 @@ curl -L -o virtctl \
 chmod +x virtctl
 ```
 
-```
-kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/$KUBEVIRT_VERSION/kubevirt-cr.yaml
-```
-
-Check that kubevirt is up and operational
-```
-kubectl get pods -n kubevirt
-```
-
 ### GHES VM
 
 #### Create the ghes-vm VM resource
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/ghes-vm.yml
+kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/ghes-vm-2.yml
 kubectl get vms
 ```
 
 #### Start the ghes-vm (create the VirtualMachineInstance)
 
 ```
-virtctl start ghes-vs
+virtctl start ghes-vm
 kubectl get vmis
 ```
 
 ```
-virtctl console ghes-vs
+./virtctl vnc ghes-vm
 ```
 
 ### Cleanup
