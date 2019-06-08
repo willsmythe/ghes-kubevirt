@@ -35,7 +35,7 @@ kubectl create -f https://github.com/kubevirt/containerized-data-importer/releas
 
 ```
 export KUBEVIRT_VERSION="v0.18.0"
-kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/$KUBEVIRT_VERSION/kubevirt-operator.yaml
+kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-operator.yaml
 ```
 
 Then make sure that the pods come up
@@ -48,7 +48,7 @@ kubectl create configmap kubevirt-config -n kubevirt --from-literal debug.useEmu
 ```
 
 ```
-kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/$KUBEVIRT_VERSION/kubevirt-cr.yaml
+kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-cr.yaml
 ```
 
 Check that kubevirt is up and operational
