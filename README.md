@@ -38,6 +38,11 @@ export KUBEVIRT_VERSION="v0.18.0"
 kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/$KUBEVIRT_VERSION/kubevirt-operator.yaml
 ```
 
+Then make sure that the pods come up
+```
+kubectl get pods -n kubevirt
+```
+
 ```
 kubectl create configmap kubevirt-config -n kubevirt --from-literal debug.useEmulation=true --from-literal feature-gates=DataVolumes
 ```
