@@ -11,6 +11,8 @@ spec:
         kubevirt.io/vm: ghes-vm
     spec:
       domain:
+        cpu:
+          cores: 2
         devices:
           disks:
           - disk:
