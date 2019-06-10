@@ -51,7 +51,7 @@ spec:
               protocol: TCP
         resources:
           requests:
-            memory: 3072M
+            memory: 16Gi
       networks:
       - name: default
         pod: {}
