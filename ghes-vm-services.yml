@@ -63,16 +63,11 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: addon-http-application-routing
 spec:
-  backend:
-    serviceName: ghes-service
-    servicePort: 80
-  #path: /
-  # rules:
-  # - host: g.3223920f69cd44c58f81.eastus2.aksapp.io
-  #   http:
-  #     paths:
-  #     - backend:
-  #         serviceName: ghes-service
-  #         servicePort: 80
-  #       path: /
-
+  rules:
+  - host: web.3223920f69cd44c58f81.eastus2.aksapp.io
+    http:
+      paths:
+      - backend:
+          serviceName: ghes-service
+          servicePort: 80
+        path: /*
