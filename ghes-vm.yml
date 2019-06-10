@@ -4,24 +4,11 @@ metadata:
   name: ghes-vm
 spec:
   running: true
-  dataVolumeTemplates:
-  - metadata:
-      name: ghes-dv-5
-    spec:
-      pvc:
-        accessModes:
-        - ReadWriteOnce
-        resources:
-          requests:
-            storage: 250Gi
-        storageClassName: managed-premium
-      source:
-        http:
-          url: https://github-enterprise.s3.amazonaws.com/kvm/releases/github-enterprise-2.17.1.qcow2
   template:
     metadata:
       labels:
         kubevirt.io/domain: ghes-vm
+        kubevirt.io/vm: ghes-vm
     spec:
       domain:
         devices:
@@ -30,10 +17,10 @@ spec:
               bus: virtio
             name: root-disk
             bootOrder: 1
-          #- disk:
-          #    bus: virtio
-          #  name: data-disk
-          #  bootOrder: 2
+          - disk:
+              bus: virtio
+            name: data-disk
+            bootOrder: 2
           interfaces:
           - name: default
             bridge: {}
@@ -69,14 +56,9 @@ spec:
       terminationGracePeriodSeconds: 0
       volumes:
       - dataVolume:
-          name: ghes-dv-5
+          name: ghes-root-dv
         name: root-disk
-      # - name: root-disk
-      #   persistentVolumeClaim:
-      #     claimName: ghes-dv-4
-      #- hostDisk:
-      #    capacity: 5Gi
-      #    path: /data/disk.img
-      #    type: DiskOrCreate
-      #  name: data-disk
-      
+      - dataVolume:
+          name: ghes-data-dv
+        name: data-disk        
+
