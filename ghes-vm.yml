@@ -48,10 +48,10 @@ spec:
               protocol: TCP
         resources:
           requests:
-            memory: "14Gi"
+            memory: "10Gi"
             cpu: "2"
           limits:
-            memory: "14Gi"
+            memory: "10Gi"
             cpu: "2"
       networks:
       - name: default
