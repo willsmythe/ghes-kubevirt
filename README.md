@@ -10,7 +10,7 @@ TODO
 ### minikube
 
 ```
-minikube config -p kubevirt set memory 4096
+minikube config -p kubevirt set memory 17000
 minikube config -p kubevirt set disk-size 300g
 ```
 
