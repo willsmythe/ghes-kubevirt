@@ -24,6 +24,7 @@ spec:
   pvc:
     accessModes:
     - ReadWriteOnce
+    storageClassName: managed-premium
     resources:
       requests:
         storage: 20Gi
