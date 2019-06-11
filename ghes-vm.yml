@@ -52,7 +52,7 @@ spec:
             memory: "10Gi"
             cpu: "2"
           limits:
-            memory: "10Gi"
+            memory: "16Gi"
             cpu: "2"
         memory:
           guest: "16Gi"
