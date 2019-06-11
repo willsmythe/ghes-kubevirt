@@ -81,9 +81,8 @@ kubectl create configmap kubevirt-config -n kubevirt --from-literal debug.useEmu
 ```
 
 ``
-
-
-debug.useEmulation=true 
+kubectl patch configmap kubevirt-config -n kubevirt -p '{"data":{"feature-gates":"DataVolumes", "debug.useEmulation": "true" }}'
+```
 
 #### Deploy KubeVirt
 

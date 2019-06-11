@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Node
 metadata:
   annotations:
-    kubevirt.io/heartbeat: "2019-06-11T19:32:52Z"
+    kubevirt.io/heartbeat: "2019-06-11T19:38:56Z"
     node.alpha.kubernetes.io/ttl: "0"
     volumes.kubernetes.io/controller-managed-attach-detach: "true"
   creationTimestamp: "2019-06-11T18:40:50Z"
@@ -23,7 +23,7 @@ metadata:
     storageprofile: managed
     storagetier: Premium_LRS
   name: aks-agentpool-12481545-0
-  resourceVersion: "11267"
+  resourceVersion: "12473"
   selfLink: /api/v1/nodes/aks-agentpool-12481545-0
   uid: 6f82eb87-8c78-11e9-95ef-6a8405d8b381
 spec:
@@ -64,25 +64,25 @@ status:
     reason: RouteCreated
     status: "False"
     type: NetworkUnavailable
-  - lastHeartbeatTime: "2019-06-11T19:34:20Z"
+  - lastHeartbeatTime: "2019-06-11T19:40:21Z"
     lastTransitionTime: "2019-06-11T18:40:50Z"
     message: kubelet has sufficient memory available
     reason: KubeletHasSufficientMemory
     status: "False"
     type: MemoryPressure
-  - lastHeartbeatTime: "2019-06-11T19:34:20Z"
+  - lastHeartbeatTime: "2019-06-11T19:40:21Z"
     lastTransitionTime: "2019-06-11T18:40:50Z"
     message: kubelet has no disk pressure
     reason: KubeletHasNoDiskPressure
     status: "False"
     type: DiskPressure
-  - lastHeartbeatTime: "2019-06-11T19:34:20Z"
+  - lastHeartbeatTime: "2019-06-11T19:40:21Z"
     lastTransitionTime: "2019-06-11T18:40:50Z"
     message: kubelet has sufficient PID available
     reason: KubeletHasSufficientPID
     status: "False"
     type: PIDPressure
-  - lastHeartbeatTime: "2019-06-11T19:34:20Z"
+  - lastHeartbeatTime: "2019-06-11T19:40:21Z"
     lastTransitionTime: "2019-06-11T18:40:50Z"
     message: kubelet is posting ready status. AppArmor enabled
     reason: KubeletReady
