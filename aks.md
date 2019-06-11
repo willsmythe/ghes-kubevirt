@@ -14,6 +14,14 @@ az aks create \
     --generate-ssh-keys
 ```
 
+### Switch default storage class (to managed premium)
+```
+kubectl patch storageclass default -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+```
+```
+kubectl patch storageclass managed-premium -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+```
+
 ```
 az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER
 kubectl get nodes
