@@ -7,7 +7,6 @@ spec:
   template:
     metadata:
       labels:
-        kubevirt.io/domain: ghes-vm
         kubevirt.io/vm: ghes-vm
     spec:
       domain:
