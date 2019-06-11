@@ -47,12 +47,15 @@ spec:
             - port: 25
               protocol: TCP
         resources:
+          overcommitGuestOverhead: true
           requests:
             memory: "10Gi"
             cpu: "2"
           limits:
             memory: "10Gi"
             cpu: "2"
+        memory:
+          guest: "16Gi"
       networks:
       - name: default
         pod: {}
