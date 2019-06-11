@@ -22,7 +22,7 @@ spec:
             bootOrder: 2
           interfaces:
           - name: default
-            bridge: {}
+            masquerade: {}
             ports:
             - port: 8443
               protocol: TCP
