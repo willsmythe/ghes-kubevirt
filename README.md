@@ -45,6 +45,10 @@ kubectl get pods -n kubevirt
 
 ```
 kubectl create configmap kubevirt-config -n kubevirt --from-literal debug.useEmulation=true --from-literal feature-gates=DataVolumes
+
+OR
+
+kubectl create configmap kubevirt-config -n kubevirt --from-literal feature-gates=DataVolumes
 ```
 
 ```
@@ -72,10 +76,16 @@ chmod +x virtctl
 
 ### GHES VM
 
-#### Create the ghes-vm VM resource
+#### Create data volume resources
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/ghes-vm-2.yml
+kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/ghes-vm-data-volumes-aks.yml
+```
+
+#### Create the VM resource
+
+```
+kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/ghes-vm.yml
 kubectl get vms
 ```
 
@@ -126,8 +136,9 @@ kubectl patch virtualmachine ghes-vm --type merge -p "{\"spec\":{\"running\":tru
 
 ### Links
 
-* https://github.com/kubevirt/kubevirt/issues/2184
+* cdi image upload pod doesn't start: https://github.com/kubevirt/kubevirt/issues/2184
 * https://help.github.com/en/enterprise/2.17/admin
+* Kubevirt Uninstall/cleanup procedures: https://github.com/kubevirt/kubevirt/issues/1491
 
 
 virtctl expose virtualmachineinstance ghes-vm --name vmiservice --port 8080 --target-port 8080

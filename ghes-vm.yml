@@ -22,7 +22,7 @@ spec:
             bootOrder: 2
           interfaces:
           - name: default
-            masquerade: {}
+            bridge: {}
             ports:
             - port: 8443
               protocol: TCP
@@ -48,10 +48,10 @@ spec:
               protocol: TCP
         resources:
           requests:
-            memory: "10Gi"
+            memory: "12Gi"
             cpu: "2"
           limits:
-            memory: "10Gi"
+            memory: "12Gi"
             cpu: "2"
       networks:
       - name: default
