@@ -22,6 +22,10 @@ az aks create \
 
 ```
 az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER
+
+-OR-
+
+az aks get-credentials --resource-group ghes-kubevirt --name ghes-kubevirt
 ```
 
 Check for nodes

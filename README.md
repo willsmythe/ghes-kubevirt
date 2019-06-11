@@ -1,7 +1,7 @@
 
 # GitHub Enterprise Server running in Kubernetes using KubeVirt
 
-## Install tools
+## Tools
 
 * kubectl
 * virtctl
@@ -14,7 +14,7 @@
   chmod +x virtctl 
   ```
 
-* minikube
+* Optional: minikube
   ```
   minikube config -p kubevirt set memory 17000
   minikube config -p kubevirt set disk-size 300g
@@ -22,33 +22,33 @@
   minikube profile kubevirt
   minikube start
   ```
-  Additional Windows-specific configuration (note: this assumes a virtual network switch named `kubevirt`)
+  Additional Windows-specific configuration  is required (this assumes a virtual network switch named `kubevirt`):
   ```
   minikube config -p kubevirt set vm-driver hyperv
   minikube config -p kubevirt set hyperv-virtual-switch kubevirt
   ```
    
 
-## CDI and Kubevirt
+## CDI and KubeVirt
 
 ### Deploy CDI
 
-*Containerized-Data-Importer (CDI) is a persistent storage management add-on for Kubernetes. It's primary goal is to provide a declarative way to build Virtual Machine Disks on PVCs for Kubevirt VMs*
+Containerized-Data-Importer (CDI) is a *persistent storage management add-on for Kubernetes. It's primary goal is to provide a declarative way to build Virtual Machine Disks on PVCs for Kubevirt VMs*.
 
 ```
 export CDI_VERSION=$(curl -s https://github.com/kubevirt/containerized-data-importer/releases/latest | grep -o "v[0-9]\.[0-9]*\.[0-9]*")
 ```
+
 ```
 kubectl create -f https://github.com/kubevirt/containerized-data-importer/releases/download/$CDI_VERSION/cdi-operator.yaml
-```
-```
+
 kubectl create -f https://github.com/kubevirt/containerized-data-importer/releases/download/$CDI_VERSION/cdi-operator-cr.yaml
 ```
 
 ### Deploy Kubevirt
 
-
 #### Deploy the operator
+
 
 ```
 export KUBEVIRT_VERSION="v0.18.0"
@@ -60,23 +60,38 @@ kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/${KUBEV
 
 #### Create the configmap
 
-```
-kubectl create configmap kubevirt-config -n kubevirt --from-literal debug.useEmulation=true --from-literal feature-gates=DataVolumes
-```
+You need to create a `kubevirt-config` configmap that enables the `DataVolumes` feature gate (this is required for using data volumes).
 
-Alternatively, with no `debug.useEmulation`:
+For most enviornments, the following is suffient:
 
 ```
 kubectl create configmap kubevirt-config -n kubevirt --from-literal feature-gates=DataVolumes
 ```
 
-#### Deploy Kubevirt
+**However, if using minikube**, check if the minikube VM's CPU supports virtualization extensions:
+
+```
+minikube ssh -p kubevirt "egrep 'svm|vmx' /proc/cpuinfo"
+```
+
+If an error occurs, you need to enable the `debug.useEmulation` feature gate (in addition to the data volumes):
+
+```
+kubectl create configmap kubevirt-config -n kubevirt --from-literal debug.useEmulation=true --from-literal feature-gates=DataVolumes
+```
+
+``
+
+
+debug.useEmulation=true 
+
+#### Deploy KubeVirt
 
 ```
 kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-cr.yaml
 ```
 
-Check that kubevirt is up and operational:
+Verify that kubevirt is up and operational:
 
 ```
 kubectl get pods -n kubevirt
@@ -84,7 +99,7 @@ kubectl get pods -n kubevirt
 
 ## GHES VM
 
-### Create data volumes
+### Create the data volumes
 
 This will create the `root` and `data` persistent volume claims. `root` is initialized from the GHES `.qcow2` image. `data` is the persistent store for user data.
 
@@ -92,10 +107,21 @@ This will create the `root` and `data` persistent volume claims. `root` is initi
 kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/ghes-vm-data-volumes.yml
 ```
 
-Alternatively, on AKS (uses managed premium storage):
+Alternatively: on AKS (uses managed premium storage):
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/ghes-vm-data-volumes-aks.yml
+kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/aks/ghes-vm-data-volumes-aks.yml
+```
+
+Verify the persistent volumes have been created and the import (for root) has completed before creating the VM resource:
+
+```
+kubectl describe dv ghes-data-dv
+kubectl describe dv ghes-root-dv
+```
+
+```
+kubectl get pvc
 ```
 
 ### Create the VM resource
@@ -115,6 +141,15 @@ Or for more details including events:
 ```
 kubectl describe vmi ghes-vm
 ```
+
+### Create management console services
+
+This exposes certain ports on the VM (80, 443, 8443) for external access:
+
+```
+kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/ghes-vm-mgmt-service.yml
+```
+
 
 ### Connect to the VM
 
