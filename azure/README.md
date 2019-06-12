@@ -1,21 +1,38 @@
-# Running GHES via KubeVirt on Azure Kubernetes Services
+# Running GHES on Azure Kubernetes Services
 
-> Note: this is not not actually working yet ;)
+This document describes requirements and instructions specific to [Azure Kubernetes Service](https://docs.microsoft.com/en-us/azure/aks/intro-kubernetes).
+
+## Get started
+
+### VM SKU
+
+To avoid [emulation](https://github.com/kubevirt/kubevirt/blob/master/docs/software-emulation.md), choose an Azure VM SKU that supports nested virtualization (like Dv3 and Ev3). Standard D8s v3 works well for testing. 
+
+### Storage
+
+Choose 
 
 ## Create the cluster
 
+
 ```
-export RESOURCE_GROUP=ghes-kubevirt3
-export CLUSTER=ghes-kubevirt3
+export RESOURCE_GROUP=ghes-kubevirt
+export CLUSTER=ghes-kubevirt
+
+or
+
+set RESOURCE_GROUP=ghes-kubevirt
+set CLUSTER=ghes-kubevirt
 ```
 
 ```
 az aks create \
     --resource-group $RESOURCE_GROUP \
-    --name myAKSCluster \
+    --name $CLUSTER \
     --node-count 1 \
     --enable-addons monitoring \
     --generate-ssh-keys
+    
 ```
 
 ## Configure kubectl
@@ -25,7 +42,7 @@ az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER
 
 -OR-
 
-az aks get-credentials --resource-group ghes-kubevirt --name ghes-kubevirt
+az aks get-credentials --resource-group %RESOURCE_GROUP% --name %CLUSTER%
 ```
 
 Check for nodes
