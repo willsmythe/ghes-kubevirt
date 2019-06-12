@@ -149,6 +149,12 @@ This exposes certain ports on the VM (80, 443, 8443) for external access:
 kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/ghes-vm-mgmt-service.yml
 ```
 
+Check the status of the external IP address:
+
+```
+kubectl get service ghes-vm-mgmt-service
+```
+
 
 ### Connect to the VM
 
