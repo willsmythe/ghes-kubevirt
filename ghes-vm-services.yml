@@ -1,7 +1,11 @@
+# GitHub Enterprise Server services
+#
+# Enables external access to the management console and other HTTP/HTTPs services on ports 80, 443, and 8443.
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: ghes-vm-mgmt-service
+  name: ghes-vm-http-service
 spec:
   externalTrafficPolicy: Cluster
   ports:

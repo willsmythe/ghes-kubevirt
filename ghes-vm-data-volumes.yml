@@ -1,3 +1,8 @@
+# GitHub Enterprise Server Data Volume resources
+#
+# Learn more: https://github.com/kubevirt/containerized-data-importer/blob/master/doc/datavolumes.md
+
+# Data volume for the GHES VM
 apiVersion: cdi.kubevirt.io/v1alpha1
 kind: DataVolume
 metadata:
@@ -13,6 +18,8 @@ spec:
       requests:
         storage: 250Gi
 ---
+
+# Data volume for user data
 apiVersion: cdi.kubevirt.io/v1alpha1
 kind: DataVolume
 metadata:
