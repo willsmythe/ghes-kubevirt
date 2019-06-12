@@ -5,8 +5,8 @@
 ## Create the cluster
 
 ```
-export RESOURCE_GROUP=ghes-kubevirt
-export CLUSTER=ghes-kubevirt
+export RESOURCE_GROUP=ghes-kubevirt3
+export CLUSTER=ghes-kubevirt3
 ```
 
 ```
@@ -22,6 +22,10 @@ az aks create \
 
 ```
 az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER
+
+-OR-
+
+az aks get-credentials --resource-group ghes-kubevirt --name ghes-kubevirt
 ```
 
 Check for nodes
@@ -66,3 +70,8 @@ Or this may have worked if it weren't for the UDP ports
 ```
 virtctl expose vmi ghes-vm --name=ghes-vm-mgmt-service --type LoadBalancer
 ```
+
+## Links
+
+* https://azure.microsoft.com/en-us/blog/nested-virtualization-in-azure/
+* https://www.brianlinkletter.com/create-a-nested-virtual-machine-in-a-microsoft-azure-linux-vm/
