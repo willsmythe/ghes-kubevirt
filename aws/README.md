@@ -90,6 +90,29 @@ For more details, see [Launching Amazon EKS Worker Nodes](https://docs.aws.amazo
 
 Record the NodeInstanceRole for the node group that was created. You need this when you configure your Amazon EKS worker nodes.
 
+## eksctl
+
+1. Install AWS CLI
+2. Install ektctl
+
+3. Creating an Administrator IAM User and Group
+
+For reference: https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html
+
+3. Login to the AWS CLI ('aws configure')
+
+```
+eksctl create cluster \
+--name ghes-kubevirt2 \
+--version 1.12 \
+--nodegroup-name standard-workers \
+--node-type t2.2xlarge \
+--nodes 1 \
+--nodes-min 1 \
+--nodes-max 2 \
+--node-ami auto
+```
+
 
 ## Other useful resources
 
