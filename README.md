@@ -92,9 +92,19 @@ To create these two data volumes:
 export GHES_DOWNLOAD_URL=https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master
 ```
 
+#### For minikube and Amazon EKS
+
 ```
 kubectl apply -f ${GHES_DOWNLOAD_URL}/ghes-vm-data-volumes.yml
 ```
+
+#### On Azure AKS
+
+```
+kubectl apply -f ${GHES_DOWNLOAD_URL}/azure/ghes-vm-data-volumes-premium.yml
+```
+
+(this creates the volumes on managed premimum SSD drives versus standard SSD)
 
 Check that the persistent volumes have been created and the import (for root) has completed before creating the VM resource:
 
