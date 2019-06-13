@@ -1,93 +1,72 @@
 
-# GitHub Enterprise Server running in Kubernetes using KubeVirt
+# Deploying GitHub Enterprise Server to Kubernetes
 
-## Tools
+Steps for deploying GitHub Enterprise Server to Kubernetes using [KubeVirt](https://kubevirt.io/).
 
-* kubectl
-* virtctl
-  ```
-  export KUBEVIRT_VERSION="v0.18.0"
-  
-  curl -L -o virtctl \
-      https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/virtctl-${KUBEVIRT_VERSION}-darwin-amd64
+## Requirements
 
-  chmod +x virtctl 
-  ```
+At a minimum the GitHub Enterprise Server VM *requires* 16GB of memory, 250GB of storage, and must be run in a host machine (or virtual machine) that supports [hardware virtualization](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/virtualization_deployment_and_administration_guide/sect-system_requirements-kvm_requirements).
 
-* Optional: minikube
-  ```
-  minikube config -p kubevirt set memory 17000
-  minikube config -p kubevirt set disk-size 300g
+These are firm requirements even for running a basic test/evaluation with a single user.
 
-  minikube profile kubevirt
-  minikube start
-  ```
-  Additional Windows-specific configuration  is required (this assumes a virtual network switch named `kubevirt`):
-  ```
-  minikube config -p kubevirt set vm-driver hyperv
-  minikube config -p kubevirt set hyperv-virtual-switch kubevirt
-  ```
-   
+## Create a Kubernetes cluster
 
-## CDI and KubeVirt
+The first step is getting a Kubernetes cluster up and running. There are different options for where this cluster runs, but the best options are locally using Minikube or on [Azure Kubernetes Service](https://docs.microsoft.com/en-us/azure/aks/).
+
+Pick one of the following options:
+
+* [Create a cluster on Azure Kubernetes Service (AKS)](./azure/README.md)
+* [Create a cluster locally on Minikube](./README-minikube.md)
+* [Create a cluster on AWS Amazon Elastic Container Service for Kubernetes (EKS)](./aws/README.md) --- *in progress*
+
+Once you have a Kubernetes cluster up, continue with the steps below.
+
+## Deploy KubeVirt and CDI
+
+Two technologies are required on top of Kubernetes:
+
+* [KubeVirt](https://github.com/kubevirt/kubevirt) enables VMs to be represented, managed, and deployed like any other resource in Kubernetes. 
+
+* [Containerized-Data-Importer (CDI)](https://github.com/kubevirt/containerized-data-importer) enables VM disks to be imported as persistent volumes, and therefore managed like any other persistent volume in Kubernetes.
 
 ### Deploy CDI
 
-Containerized-Data-Importer (CDI) is a *persistent storage management add-on for Kubernetes. It's primary goal is to provide a declarative way to build Virtual Machine Disks on PVCs for Kubevirt VMs*.
-
 ```
 export CDI_VERSION=$(curl -s https://github.com/kubevirt/containerized-data-importer/releases/latest | grep -o "v[0-9]\.[0-9]*\.[0-9]*")
+
+export CDI_DOWNLOAD_URL=https://github.com/kubevirt/containerized-data-importer/releases/download/$CDI_VERSION
 ```
 
 ```
-kubectl create -f https://github.com/kubevirt/containerized-data-importer/releases/download/$CDI_VERSION/cdi-operator.yaml
-
-kubectl create -f https://github.com/kubevirt/containerized-data-importer/releases/download/$CDI_VERSION/cdi-operator-cr.yaml
+kubectl create -f ${CDI_DOWNLOAD_URL}/cdi-operator.yaml
+kubectl create -f ${CDI_DOWNLOAD_URL}/cdi-operator-cr.yaml
 ```
 
 ### Deploy Kubevirt
 
 #### Deploy the operator
 
-
 ```
 export KUBEVIRT_VERSION="v0.18.0"
+export KUBEVIRT_DOWNLOAD_URL=https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/
 ```
 
 ```
-kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-operator.yaml
+kubectl create -f ${KUBEVIRT_DOWNLOAD_URL}/kubevirt-operator.yaml
 ```
 
-#### Create the configmap
+#### Create the configmap / enable data volumes feature gate
 
 You need to create a `kubevirt-config` configmap that enables the `DataVolumes` feature gate (this is required for using data volumes).
-
-For most enviornments, the following is suffient:
 
 ```
 kubectl create configmap kubevirt-config -n kubevirt --from-literal feature-gates=DataVolumes
 ```
 
-**However, if using minikube**, check if the minikube VM's CPU supports virtualization extensions:
-
-```
-minikube ssh -p kubevirt "egrep 'svm|vmx' /proc/cpuinfo"
-```
-
-If an error occurs, you need to enable the `debug.useEmulation` feature gate (in addition to the data volumes):
-
-```
-kubectl create configmap kubevirt-config -n kubevirt --from-literal debug.useEmulation=true --from-literal feature-gates=DataVolumes
-```
-
-``
-kubectl patch configmap kubevirt-config -n kubevirt -p '{"data":{"feature-gates":"DataVolumes", "debug.useEmulation": "true" }}'
-```
-
 #### Deploy KubeVirt
 
 ```
-kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-cr.yaml
+kubectl create -f ${KUBEVIRT_DOWNLOAD_URL}/kubevirt-cr.yaml
 ```
 
 Verify that kubevirt is up and operational:
@@ -96,37 +75,54 @@ Verify that kubevirt is up and operational:
 kubectl get pods -n kubevirt
 ```
 
-## GHES VM
+Once all pods have stared and are operational, proceed to the next step.
+
+## Deploy the GitHub Enterprise Server VM
 
 ### Create the data volumes
 
-This will create the `root` and `data` persistent volume claims. `root` is initialized from the GHES `.qcow2` image. `data` is the persistent store for user data.
+Two persistent data volumes are needed for the GHES VM:
+
+* `root` is the GHES VM root volume which is initialized from the public 2.17.1 `.qcow2` VM image
+* `data` is the persistent data volume where GHES user data is stored
+
+To create these two data volumes:
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/ghes-vm-data-volumes.yml
+export GHES_DOWNLOAD_URL=https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master
 ```
 
-Alternatively: on AKS (uses managed premium storage):
+#### For minikube and Amazon EKS
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/aks/ghes-vm-data-volumes-aks.yml
+kubectl apply -f ${GHES_DOWNLOAD_URL}/ghes-vm-data-volumes.yml
 ```
 
-Verify the persistent volumes have been created and the import (for root) has completed before creating the VM resource:
+#### On Azure AKS
+
+```
+kubectl apply -f ${GHES_DOWNLOAD_URL}/azure/ghes-vm-data-volumes-premium.yml
+```
+
+(this creates the volumes on managed premimum SSD drives versus standard SSD)
+
+Check that the persistent volumes have been created and the import (for root) has completed before creating the VM resource:
 
 ```
 kubectl describe dv ghes-data-dv
 kubectl describe dv ghes-root-dv
 ```
 
-```
-kubectl get pvc
-```
+> Note: creating `ghes-root-dv` will take 5-10 minutes.
 
 ### Create the VM resource
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/ghes-vm.yml
+export GHES_DOWNLOAD_URL=https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master
+```
+
+```
+kubectl apply -f ${GHES_DOWNLOAD_URL}/ghes-vm.yml
 ```
 
 Check the status of the VMI:
@@ -141,69 +137,74 @@ Or for more details including events:
 kubectl describe vmi ghes-vm
 ```
 
-### Create management console services
-
-This exposes certain ports on the VM (80, 443, 8443) for external access:
-
-```
-kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/ghes-vm-mgmt-service.yml
-```
-
-Check the status of the external IP address:
-
-```
-kubectl get service ghes-vm-mgmt-service
-```
-
-
 ### Connect to the VM
+
+To VNC to the VM you first need to install `virtctl`:
+
+```
+export KUBEVIRT_VERSION="v0.18.0"
+
+curl -L -o virtctl \
+    https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/virtctl-${KUBEVIRT_VERSION}-darwin-amd64
+
+chmod +x virtctl 
+```
+
+To open a VNC session to the VM:
 
 ```
 virtctl vnc ghes-vm
 ```
 
-## Other
+> virtctl only supports a handful of VNC clients. If it does not find one, the command will fail. One workaround is to create a `remote-viewer.bat` (see example) or `remote-viewer` shell script and add it to your `$PATH`. Your script should take the single argument (`vnc://ipaddress:port`), adapt it, and launch your preferred VNC program.
 
-### Useful commands
+## Configure the instance
 
-```
-minikube ip
-minikube dashboard
-minikube delete
-```
+Before you can access the GitHub Enteprise Server setup wizard (to finish the setup process), you need to enable access to certain TCP ports.
 
-### Cleanup
+### Enable access to the VM
+
+This exposes certain ports on the VM (80, 443, 8443):
 
 ```
-minikube delete -p kubevirt
+kubectl apply -f ${GHES_DOWNLOAD_URL}/ghes-vm-services.yml
 ```
 
-### Random commands
+Check the status of the external IP address:
 
 ```
-kubectl delete -f https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-operator.yaml
-set PATH=c:\tools;%PATH%;
-export PATH=/c/tools/:$PATH
-docker run -it -v C:\work\github\ghe-server:/ghe-server -w /ghe-server ubuntu:18.04 bash
-kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/%KUBEVIRT_VERSION%/kubevirt-cr.yaml
+kubectl get service ghes-vm-http-service
 ```
 
-```
-kubectl delete configmap kubevirt-config -n kubevirt
-```
+### Run the setup experience
 
-### Original
+Once an external IP address has been established for the `ghes-vm-http-service` service, navigate to the GitHub Enterprise Server setup wizard:
 
 ```
-kubectl apply -f https://gist.githubusercontent.com/gnawhleinad/0151195ea6412bfe39d6b341666ebcc2/raw/b4e35c8bb71b957c01a04bcfe39efdeeaa7a0b9c/github-enterprise-server.yaml
-kubectl patch virtualmachine ghes-vm --type merge -p "{\"spec\":{\"running\":true}}"
+http://{publicIP}/setup
 ```
 
-### Links
+This may take a minute, and you may be prompted about SSL cert problems.
+
+## Cleanup
+
+To stop the VM:
+
+```
+virtctl stop ghes-vm
+```
+
+This doesn't delete any data volumes, which means you can restart the VM and pick back up with all of your data:
+
+```
+virtctl start ghes-vm
+```
+
+Once you are done, the easist way to cleanup the VM and all other resources is to simply delete the Kubernetes cluster you created. For example, on Minikube you can run: `minikube delete -p kubevirt`.
+
+## Troubleshooting
 
 * cdi image upload pod doesn't start: https://github.com/kubevirt/kubevirt/issues/2184
 * https://help.github.com/en/enterprise/2.17/admin
 * Kubevirt Uninstall/cleanup procedures: https://github.com/kubevirt/kubevirt/issues/1491
 
-
-virtctl expose virtualmachineinstance ghes-vm --name vmiservice --port 8080 --target-port 8080
