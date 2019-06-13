@@ -7,7 +7,7 @@ Follow the [general install steps](https://kubernetes.io/docs/tasks/tools/instal
 ## Configure
 
 ```
-minikube config -p kubevirt set memory 17000
+minikube config -p kubevirt set memory 18g
 minikube config -p kubevirt set disk-size 300g
 ```
 
