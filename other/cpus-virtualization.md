@@ -162,5 +162,6 @@ Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cm
 
 ## Useful links
 
-* https://www.cyberciti.biz/faq/linux-xen-vmware-kvm-intel-vt-amd-v-support/
-* https://aws.amazon.com/about-aws/whats-new/2019/02/introducing-five-new-amazon-ec2-bare-metal-instances/
+* [Network Labs Using Nested Virtualization in the Cloud](http://www.brianlinkletter.com/network-labs-using-nested-virtualization-in-the-cloud/)
+* [Linux Find Out If CPU Support Intel VT/AMD-V Virtualization For KVM](https://www.cyberciti.biz/faq/linux-xen-vmware-kvm-intel-vt-amd-v-support/)
+* [Introducing Five New Amazon EC2 Bare Metal Instances](https://aws.amazon.com/about-aws/whats-new/2019/02/introducing-five-new-amazon-ec2-bare-metal-instances/)

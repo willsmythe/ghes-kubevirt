@@ -92,3 +92,9 @@ virtctl expose vmi ghes-vm --name=ghes-vm-mgmt-service --type LoadBalancer
 
 * https://azure.microsoft.com/en-us/blog/nested-virtualization-in-azure/
 * https://www.brianlinkletter.com/create-a-nested-virtual-machine-in-a-microsoft-azure-linux-vm/
+
+Alternatively: on AKS (uses managed premium storage):
+
+```
+kubectl apply -f https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master/aks/ghes-vm-data-volumes-aks.yml
+```
