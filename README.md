@@ -30,13 +30,13 @@ Two technologies are required on top of Kubernetes:
 
 ### Deploy CDI
 
-```
+```bash
 export CDI_VERSION=$(curl -s https://github.com/kubevirt/containerized-data-importer/releases/latest | grep -o "v[0-9]\.[0-9]*\.[0-9]*")
 
 export CDI_DOWNLOAD_URL=https://github.com/kubevirt/containerized-data-importer/releases/download/$CDI_VERSION
 ```
 
-```
+```bash
 kubectl create -f ${CDI_DOWNLOAD_URL}/cdi-operator.yaml
 kubectl create -f ${CDI_DOWNLOAD_URL}/cdi-operator-cr.yaml
 ```
@@ -45,12 +45,12 @@ kubectl create -f ${CDI_DOWNLOAD_URL}/cdi-operator-cr.yaml
 
 #### Deploy the operator
 
-```
+```bash
 export KUBEVIRT_VERSION="v0.18.0"
 export KUBEVIRT_DOWNLOAD_URL=https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/
 ```
 
-```
+```bash
 kubectl create -f ${KUBEVIRT_DOWNLOAD_URL}/kubevirt-operator.yaml
 ```
 
@@ -58,19 +58,19 @@ kubectl create -f ${KUBEVIRT_DOWNLOAD_URL}/kubevirt-operator.yaml
 
 You need to create a `kubevirt-config` configmap that enables the `DataVolumes` feature gate (this is required for using data volumes).
 
-```
+```bash
 kubectl create configmap kubevirt-config -n kubevirt --from-literal feature-gates=DataVolumes
 ```
 
 #### Deploy KubeVirt
 
-```
+```bash
 kubectl create -f ${KUBEVIRT_DOWNLOAD_URL}/kubevirt-cr.yaml
 ```
 
 Verify that kubevirt is up and operational:
 
-```
+```bash
 kubectl get pods -n kubevirt
 ```
 
@@ -87,19 +87,19 @@ Two persistent data volumes are needed for the GHES VM:
 
 To create these two data volumes:
 
-```
+```bash
 export GHES_DOWNLOAD_URL=https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master
 ```
 
 #### For minikube
 
-```
+```bash
 kubectl apply -f ${GHES_DOWNLOAD_URL}/ghes-vm-data-volumes.yml
 ```
 
 #### On Azure AKS
 
-```
+```bash
 kubectl apply -f ${GHES_DOWNLOAD_URL}/azure/ghes-vm-data-volumes-premium.yml
 ```
 
@@ -107,7 +107,7 @@ kubectl apply -f ${GHES_DOWNLOAD_URL}/azure/ghes-vm-data-volumes-premium.yml
 
 Check that the persistent volumes have been created and the import (for root) has completed before creating the VM resource:
 
-```
+```bash
 kubectl describe dv ghes-data-dv
 kubectl describe dv ghes-root-dv
 ```
@@ -116,23 +116,19 @@ kubectl describe dv ghes-root-dv
 
 ### Create the VM resource
 
-```
-export GHES_DOWNLOAD_URL=https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master
-```
-
-```
+```bash
 kubectl apply -f ${GHES_DOWNLOAD_URL}/ghes-vm.yml
 ```
 
 Check the status of the VMI:
 
-```
+```bash
 kubectl get vmi ghes-vm
 ```
 
 Or for more details including events:
 
-```
+```bash
 kubectl describe vmi ghes-vm
 ```
 
@@ -140,9 +136,7 @@ kubectl describe vmi ghes-vm
 
 To VNC to the VM you first need to install `virtctl`:
 
-```
-export KUBEVIRT_VERSION="v0.18.0"
-
+```bash
 curl -L -o virtctl \
     https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/virtctl-${KUBEVIRT_VERSION}-darwin-amd64
 
@@ -151,8 +145,8 @@ chmod +x virtctl
 
 To open a VNC session to the VM:
 
-```
-virtctl vnc ghes-vm
+```bash
+./virtctl vnc ghes-vm
 ```
 
 > virtctl only supports a handful of VNC clients. If it does not find one, the command will fail. One workaround is to create a `remote-viewer.bat` (see example) or `remote-viewer` shell script and add it to your `$PATH`. Your script should take the single argument (`vnc://ipaddress:port`), adapt it, and launch your preferred VNC program.
@@ -165,13 +159,13 @@ Before you can access the GitHub Enteprise Server setup wizard (to finish the se
 
 This exposes certain ports on the VM (80, 443, 8443):
 
-```
+```bash
 kubectl apply -f ${GHES_DOWNLOAD_URL}/ghes-vm-services.yml
 ```
 
 Check the status of the external IP address:
 
-```
+```bash
 kubectl get service ghes-vm-http-service
 ```
 
@@ -189,21 +183,21 @@ This may take a minute, and you may be prompted about SSL cert problems.
 
 To stop the VM:
 
-```
-virtctl stop ghes-vm
+```bash
+./virtctl stop ghes-vm
 ```
 
 This doesn't delete any data volumes, which means you can restart the VM and pick back up with all of your data:
 
-```
-virtctl start ghes-vm
+```bash
+./virtctl start ghes-vm
 ```
 
 Once you are done, the easist way to cleanup the VM and all other resources is to simply delete the Kubernetes cluster you created. For example, on Minikube you can run: `minikube delete -p kubevirt`.
 
 ## Troubleshooting
 
-* cdi image upload pod doesn't start: https://github.com/kubevirt/kubevirt/issues/2184
-* https://help.github.com/en/enterprise/2.17/admin
-* Kubevirt Uninstall/cleanup procedures: https://github.com/kubevirt/kubevirt/issues/1491
+* [cdi image upload pod doesn't start](https://github.com/kubevirt/kubevirt/issues/2184)
+* [GHES Admin Guide](https://help.github.com/en/enterprise/2.17/admin)
+* [Kubevirt Uninstall/cleanup procedures](https://github.com/kubevirt/kubevirt/issues/1491)
 
