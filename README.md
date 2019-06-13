@@ -17,7 +17,6 @@ Pick one of the following options:
 
 * [Create a cluster on Azure Kubernetes Service (AKS)](./azure/README.md)
 * [Create a cluster locally on Minikube](./README-minikube.md)
-* [Create a cluster on AWS Amazon Elastic Container Service for Kubernetes (EKS)](./aws/README.md) --- *in progress*
 
 Once you have a Kubernetes cluster up, continue with the steps below.
 
@@ -92,7 +91,7 @@ To create these two data volumes:
 export GHES_DOWNLOAD_URL=https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master
 ```
 
-#### For minikube and Amazon EKS
+#### For minikube
 
 ```
 kubectl apply -f ${GHES_DOWNLOAD_URL}/ghes-vm-data-volumes.yml

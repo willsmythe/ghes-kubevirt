@@ -4,6 +4,44 @@ This document has instructions specific to running GitHub Enterprise Server on [
 
 Once you have the `ghes-kubevirt` Kubernetes cluster up and running, you can follow the [general instructions](../README.md) for deploying KubeVirt and GHES-related resources.
 
+## Pre-reqs
+
+* AWS account with permission to create new resources
+
+## Install and configure tools
+
+1. [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/installing.html)
+
+2. [Install kubectl](https://docs.aws.amazon.com/eks/latest/userguide/install-kubectl.html) (standard Kubernetes CLI)
+
+3. [Install ektctl](https://eksctl.io/) (EKS-specific CLI)
+
+4. [Configure the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html#cli-quick-configuration)
+   * You should create an **Administrator** user belonging to a new Administrators group ([see steps](https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html)) and use the Access Key ID and Secret Access Key for this user to configure the AWS CLI.
+
+## Create the cluster
+
+```
+eksctl create cluster \
+--name ghes-kubevirt \
+--version 1.12 \
+--nodegroup-name standard-workers \
+--node-type t2.2xlarge \
+--nodes 1 \
+--nodes-min 1 \
+--nodes-max 2 \
+--node-ami auto
+```
+
+Confirm the cluster is up:
+
+```
+kubectl get nodes
+```
+
+
+### Alternate steps (via management)
+
 ## Create an EKS-managed Kubernetes cluster
 
 ### 1. Create service role
@@ -90,27 +128,7 @@ For more details, see [Launching Amazon EKS Worker Nodes](https://docs.aws.amazo
 
 Record the NodeInstanceRole for the node group that was created. You need this when you configure your Amazon EKS worker nodes.
 
-## eksctl
 
-1. Install AWS CLI
-2. Install ektctl
-
-3. Creating an Administrator IAM User and Group
-
-For reference: https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html
-
-3. Login to the AWS CLI ('aws configure')
-
-```
-eksctl create cluster \
---name ghes-kubevirt2 \
---version 1.12 \
---nodegroup-name standard-workers \
---node-type t2.2xlarge \
---nodes 1 \
---nodes-min 1 \
---nodes-max 2 \
---node-ami auto
 ```
 
 
