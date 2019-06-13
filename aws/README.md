@@ -121,3 +121,5 @@ eksctl create cluster \
 2. https://aws.amazon.com/ec2/instance-types/
 
 3. https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2#Limits:
+
+
