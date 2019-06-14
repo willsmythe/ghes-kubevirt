@@ -1,7 +1,7 @@
 
-# Deploying GitHub Enterprise Server to Kubernetes
+# Deploying GitHub Enterprise Server on Kubernetes
 
-Steps for deploying GitHub Enterprise Server to Kubernetes using [KubeVirt](https://kubevirt.io/).
+Steps for deploying GitHub Enterprise Server on Kubernetes with [KubeVirt](https://kubevirt.io/).
 
 ## Requirements
 
