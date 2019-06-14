@@ -16,7 +16,9 @@ The first step is getting a Kubernetes cluster up and running. There are differe
 Pick one of the following options:
 
 * [Create a cluster on Azure Kubernetes Service (AKS)](./azure/README.md)
-* [Create a cluster locally on Minikube](./README-minikube.md)
+* [Create a cluster locally on Minikube](./minikube/README.md)
+
+Other attempts were made to deploy via [AWS EKS](aws/README.md) and [Packet](packet/README.md) were abandoned due to technical limitions (lack of hardware virtualization support) and problems unrelated to GHES.
 
 Once you have a Kubernetes cluster up, continue with the steps below.
 
@@ -91,7 +93,7 @@ To create these two data volumes:
 export GHES_DOWNLOAD_URL=https://raw.githubusercontent.com/willsmythe/ghes-kubevirt/master
 ```
 
-#### For minikube
+#### For Minikube
 
 ```bash
 kubectl apply -f ${GHES_DOWNLOAD_URL}/ghes-vm-data-volumes.yml

@@ -1,4 +1,4 @@
-# AKS networking options
+# AKS networking tests
 
 (just for reference)
 

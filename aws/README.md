@@ -1,4 +1,6 @@
-# Running GHES on Amazon EKS
+# Deploying GHES on AWS EKS
+
+> **IMPORTANT**: GHES VM does not currently run on AWS EKS because no standard (non-metal) EC2 instance types support [hardware virtualization](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/virtualization_deployment_and_administration_guide/sect-system_requirements-kvm_requirements) which is required since the GHES VM does not run in emulation mode (see [issue #6](https://github.com/willsmythe/ghes-kubevirt/issues/6)).
 
 This document has instructions specific to running GitHub Enterprise Server on [Amazon Elastic Container Service for Kubernetes (EKS)](https://aws.amazon.com/eks/).
 
@@ -40,7 +42,9 @@ kubectl get nodes
 ```
 
 
-### Alternate steps (via management)
+# Alternate steps (via web console)
+
+> **NOTE**: although you can create the cluster using the web console, it is **significantly** easier to use `eksctl` since it creates all the necessary resource (cluster, security roles, work node groups, EC2 instances, etc) in a single command.
 
 ## Create an EKS-managed Kubernetes cluster
 
@@ -129,15 +133,8 @@ For more details, see [Launching Amazon EKS Worker Nodes](https://docs.aws.amazo
 Record the NodeInstanceRole for the node group that was created. You need this when you configure your Amazon EKS worker nodes.
 
 
-```
-
-
 ## Other useful resources
 
-1. Deploying KubeVirt on AWS: https://kubevirt.io/pages/ec2
-
-2. https://aws.amazon.com/ec2/instance-types/
-
-3. https://us-east-2.console.aws.amazon.com/ec2/v2/home?region=us-east-2#Limits:
+1. [Deploying KubeVirt on AWS](https://kubevirt.io/pages/ec2)
 
 
