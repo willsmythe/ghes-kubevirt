@@ -20,7 +20,7 @@ minikube config -p kubevirt set hyperv-virtual-switch kubevirt
 
 > Note: this assumes a virtual network switch named `kubevirt` has been created.
 
-## Start the instance (be sure you are on C: drive, or you will need to delete .minikube from your profile dir and run it again)
+## Start the instance (on Windows, be sure you are on C: drive, or you will need to delete .minikube from your profile dir and run it again)
 
 ```bash
 minikube profile kubevirt
