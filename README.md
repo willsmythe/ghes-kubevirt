@@ -1,7 +1,10 @@
+> :warning: **WARNING: This is not a supported deployment option for GHES**, and may or may not work with the latest version of GHES, Kubernetes, or any of the required components.
 
-# Deploying GitHub Enterprise Server on Kubernetes
+# Deploying GitHub Enterprise Server on Kubernetes (experiment)
 
 Steps for deploying GitHub Enterprise Server on Kubernetes with [KubeVirt](https://kubevirt.io/).
+
+**IMPORTANT**: See disclaimer above.
 
 ## Requirements
 
