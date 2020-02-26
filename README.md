@@ -1,4 +1,6 @@
-> :warning: **WARNING: This is not a supported deployment option for GHES**, and may or may not work with the latest version of GHES, Kubernetes, or any of the required components.
+# Disclaimer
+
+> **WARNING: This is not a supported deployment option for GHES**, and may or may not work with the latest version of GHES, Kubernetes, or any of the required components.
 
 # Deploying GitHub Enterprise Server on Kubernetes (experiment)
 
